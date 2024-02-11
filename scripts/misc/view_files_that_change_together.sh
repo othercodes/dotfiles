@@ -1,0 +1,7 @@
+#!/bin/bashi
+git log --pretty=format: --name-only |
+  awk 'BEGIN { RS = "" } { for (i = 1; i <= NF; i++) for (j = i + 1; j <= NF; j++) print $i " <-> " $j }' |
+  sort |
+  uniq -c |
+  sort -rn |
+  head -n 5
