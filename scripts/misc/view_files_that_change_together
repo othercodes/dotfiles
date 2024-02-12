@@ -1,4 +1,13 @@
-#!/bin/bashi
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+##? List the files that are changed together.
+##?
+##? Usage:
+##?    view_files_that_change_toguether
+docs::parse "$@"
+
 git log --pretty=format: --name-only |
   awk 'BEGIN { RS = "" } { for (i = 1; i <= NF; i++) for (j = i + 1; j <= NF; j++) print $i " <-> " $j }' |
   sort |
