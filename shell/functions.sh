@@ -17,3 +17,11 @@ function recent_dirs() {
 
 	cd "$(echo "$selected" | sed "s/\~/$escaped_home/")" || echo "Invalid directory"
 }
+
+function 2cwebp() {
+	local extension="${1:-jpg}"
+	local quality="${2:-80}"
+	for file in *.$extension; do
+		cwebp "$file" -q "$quality" -o "${file/$extension/webp}"
+	done
+}
