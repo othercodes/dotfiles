@@ -1,3 +1,9 @@
 [user]
-	name = Unay Santisteban
-	email = usantisteban@othercode.io
+    name = Unay Santisteban
+    email = usantisteban@othercode.io
+[core]
+    editor = nvim
+    excludesfile = ~/.gitignore
+    autocrlf = input
+[init]
+    defaultBranch = master

@@ -19,3 +19,5 @@
     ~/.inputrc: shell/.inputrc
     ~/.config/nvim: editors/nvim
     ~/.tmux.conf: shell/.tmux.conf
+    ~/.gitconfig: git/.gitconfig
+    ~/.gitignore: git/.gitignore
