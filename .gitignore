@@ -1,2 +1,5 @@
 shell/zsh/.zim
-
+media/mpd/mpd.db
+media/mpd/mpd.log
+media/mpd/mpd.pid
+media/mpd/mpdstate
