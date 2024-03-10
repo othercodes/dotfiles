@@ -21,3 +21,5 @@
     ~/.tmux.conf: shell/.tmux.conf
     ~/.gitconfig: git/.gitconfig
     ~/.gitignore: git/.gitignore
+    ~/.mpd: media/mpd
+    ~/.ncmpcpp: media/ncmpcpp
