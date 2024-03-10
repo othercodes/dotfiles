@@ -15,7 +15,7 @@
     "files.eol": "\n",
     "search.useGlobalIgnoreFiles": true,
     "search.useIgnoreFiles": true,
-    "workbench.colorTheme": "Default Dark+",
+    "workbench.colorTheme": "Catppuccin Mocha",
     "github.copilot.enable": {
         "*": true,
         "yaml": false,
@@ -40,7 +40,7 @@
     "workbench.tree.indent": 20,
     "workbench.list.smoothScrolling": true,
     "symbols.hidesExplorerArrows": false,
-    "workbench.iconTheme": "material-icon-theme",
+    "workbench.iconTheme": "catppuccin-mocha",
     "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
     "terminal.integrated.fontSize": 16,
     "window.zoomLevel": 1
