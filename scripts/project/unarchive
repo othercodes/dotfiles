@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? Creates a new project into the projects index.
+##?
+##? Usage:
+##?    unarchive [<project>] [--open] [--quite]
+docs::parse "$@"
+
+if [ -z "$project" ]; then
+	project=$(ls --color=never "$DEEPTHOUGHT_PATH/Archives/" | fzf)
+fi
+
+open=${open:-false}
+quite=${quite:-false}
+
+project_path="$DEEPTHOUGHT_PATH/Archives/$project"
+projects="$DEEPTHOUGHT_PATH/Projects/"
+
+mv "$project_path" "$projects"
+
+if [ "$quite" == false ]; then
+	echo "Project $project unarchived successfully!"
+fi
+
+if [ "$open" == true ]; then
+	cd "$projects/$project"
+	nvim "$project.md"
+fi

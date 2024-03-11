@@ -7,7 +7,7 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 ##? Creates a new project into the projects index.
 ##?
 ##? Usage:
-##?    add <project> [--code=<code>] [--type=<type>] [--priority=<priority>] [--index-only]
+##?    add <project> [--open] [--code=<code>] [--type=<type>] [--priority=<priority>] [--index-only] [--quite]
 docs::parse "$@"
 
 title=${project:-unknown}
@@ -22,13 +22,17 @@ type=${type:-website}
 contract=${contract:-development}
 priority=${priority:-high}
 index_only=${index_only:-false}
+open=${open:-false}
+quite=${quite:-false}
 
 project_new_path="$DEEPTHOUGHT_PATH/Projects/$title"
 project_tpl_path="$DEEPTHOUGHT_PATH/Templates"
 
-echo "Name: $title ($code)"
-echo "Type: ${type}"
-echo "Contract: ${contract}"
+if [ "$quite" == false ]; then
+	echo "Name: $title ($code)"
+	echo "Type: ${type}"
+	echo "Contract: ${contract}"
+fi
 
 # Create the main directory.
 mkdir -p "$project_new_path"
@@ -48,4 +52,11 @@ if [ "$index_only" == false ]; then
 	mkdir -p "$project_new_path"/{Content,Tasks,images}
 fi
 
-echo "Project created successfully!"
+if [ "$quite" == false ]; then
+	echo "Project created successfully!"
+fi
+
+if [ "$open" == true ]; then
+	cd "$project_new_path"
+	nvim "$title.md"
+fi

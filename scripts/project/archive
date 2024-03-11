@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? Creates a new project into the projects index.
+##?
+##? Usage:
+##?    archive [<project>] [--quite]
+docs::parse "$@"
+
+if [ -z "$project" ]; then
+	project=$(ls --color=never "$DEEPTHOUGHT_PATH/Projects/" | fzf)
+fi
+
+quite=${quite:-false}
+
+project_path="$DEEPTHOUGHT_PATH/Projects/$project"
+archive="$DEEPTHOUGHT_PATH/Archives/"
+
+mv "$project_path" "$archive"
+
+if [ "$quite" == false ]; then
+	echo "Project $project archived successfully!"
+fi
