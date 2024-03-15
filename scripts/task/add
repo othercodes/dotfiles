@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? Creates a new task into the project directory.
+##?
+##? Usage:
+##?    add <title> [<project>] [--type=<type>] [--open] [--quite]
+docs::parse "$@"
+
+project_tpl_path="$DEEPTHOUGHT_PATH/Templates"
+
+if [ -z "$project" ]; then
+	project=$(ls --color=never "$DEEPTHOUGHT_PATH/Projects/" | fzf)
+fi
+
+# Create the task directory.
+mkdir -p "$DEEPTHOUGHT_PATH/Projects/$project/Tasks"
+
+count=$(ls "$DEEPTHOUGHT_PATH/Projects/$project/Tasks" -1 | wc -l)
+count=$((count + 1)) # "cast" to integer
+if [ "$count" -eq 0 ]; then
+	count=1
+fi
+# format the task count number
+count=$(printf "%03d" "$count")
+
+code=$(cat "$DEEPTHOUGHT_PATH/Projects/$project/$project.md" | grep -m 1 "code:" | cut -d ' ' -f 2)
+timestamp=$(date +"%Y-%m-%dT%H:%M:%S%z")
+
+type=${type:-task}
+if [ "$type" != "task" ]; then
+	type="tasks/$type"
+fi
+
+title=${title:-undefined}
+open=${open:-false}
+quite=${quite:-false}
+
+task_id="$code-$count"
+
+if [ "$quite" == false ]; then
+	echo "Task: $task_id"
+	echo "Project: $project"
+fi
+
+# create the task file.
+cp "$project_tpl_path/$type.md" "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
+
+# Replace the keys from the templates.
+sed -i 's/<%title%>/'"$title"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
+sed -i 's/<%timestamp%>/'"$timestamp"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
+sed -i 's/<%task-id%>/'"$task_id"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
+
+if [ "$quite" == false ]; then
+	echo "Task created successfully!"
+fi
+
+if [ "$open" == true ]; then
+	cd "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/"
+	nvim "$code-$count.md"
+fi
