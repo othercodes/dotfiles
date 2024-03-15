@@ -7,7 +7,7 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 ##? Creates a new project into the projects index.
 ##?
 ##? Usage:
-##?    add <project> [--open] [--code=<code>] [--type=<type>] [--priority=<priority>] [--index-only] [--quite]
+##?    add <project> [--open] [--code=<code>] [--type=<type>] [--priority=<priority>] [--contract=<contract>] [--index-only] [--quite]
 docs::parse "$@"
 
 title=${project:-unknown}
