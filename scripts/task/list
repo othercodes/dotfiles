@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? List the task registered in the ongoing projects.
+##?
+##? Usage:
+##?    list [--project=<project>] [--type=<type>] [--contract=<contract>] [--priority=<priority>] [--status=<status>] [--id-only]
+docs::parse "$@"
+
+task_list=$(grep --include=\*.md -Rnwl ~/DeepThought/Projects/**/Tasks/ -e "- task")
+for task in $task_list; do
+	echo "Task $task"
+done

@@ -53,6 +53,7 @@ cp "$project_tpl_path/$type.md" "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task
 sed -i 's/<%title%>/'"$title"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
 sed -i 's/<%timestamp%>/'"$timestamp"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
 sed -i 's/<%task-id%>/'"$task_id"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
+sed -i 's/<%status%>/pending/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
 
 if [ "$quite" == false ]; then
 	echo "Task created successfully!"
