@@ -7,19 +7,42 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 ##? Creates a new task into the project directory.
 ##?
 ##? Usage:
-##?    add <title> [<project>] [--type=<type>] [--open] [--quite]
+##?    add <title> [<project>] [--parent=<parent>] [--type=<type>] [--open] [--quite]
 docs::parse "$@"
 
 project_tpl_path="$DEEPTHOUGHT_PATH/Templates"
 
-if [ -z "$project" ]; then
-	project=$(ls --color=never "$DEEPTHOUGHT_PATH/Projects/" | fzf)
+if [ -n "$parent" ]; then
+	# If parent is true, display the project selector, if not assume the
+	# project name is provided by the user.
+	if [ "$parent" == true ]; then
+		parent=$(ls --color=never "$DEEPTHOUGHT_PATH/Projects/" | fzf)
+	fi
+	# validate the parent project path.
+	if [ ! -d "$DEEPTHOUGHT_PATH/Projects/$parent" ]; then
+		echo "Given parent project does not exists."
+		exit
+	fi
+	projects_base_path="$DEEPTHOUGHT_PATH/Projects/$parent/Projects"
+else
+	projects_base_path="$DEEPTHOUGHT_PATH/Projects"
 fi
 
-# Create the task directory.
-mkdir -p "$DEEPTHOUGHT_PATH/Projects/$project/Tasks"
+if [ -z "$project" ]; then
+	project=$(ls --color=never "$projects_base_path" | fzf)
+fi
 
-count=$(ls "$DEEPTHOUGHT_PATH/Projects/$project/Tasks" -1 | wc -l)
+if [ ! -d "$projects_base_path/$project" ]; then
+	echo "Given parent project does not exists."
+	exit
+fi
+
+task_new_path="$projects_base_path/$project/Tasks"
+
+# Create the task directory (idempotently).
+mkdir -p "$projects_base_path/$project/Tasks"
+
+count=$(ls "$task_new_path" -1 | wc -l)
 count=$((count + 1)) # "cast" to integer
 if [ "$count" -eq 0 ]; then
 	count=1
@@ -27,7 +50,7 @@ fi
 # format the task count number
 count=$(printf "%03d" "$count")
 
-code=$(cat "$DEEPTHOUGHT_PATH/Projects/$project/$project.md" | grep -m 1 "code:" | cut -d ' ' -f 2)
+code=$(cat "$projects_base_path/$project/$project.md" | grep -m 1 "code:" | cut -d ' ' -f 2)
 timestamp=$(date +"%Y-%m-%dT%H:%M:%S%z")
 
 type=${type:-task}
@@ -44,22 +67,23 @@ task_id="$code-$count"
 if [ "$quite" == false ]; then
 	echo "Task: $task_id"
 	echo "Project: $project"
+	echo "Path: $task_new_path"
 fi
 
 # create the task file.
-cp "$project_tpl_path/$type.md" "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
+cp "$project_tpl_path/$type.md" "$task_new_path/$task_id.md"
 
 # Replace the keys from the templates.
-sed -i 's/<%title%>/'"$title"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
-sed -i 's/<%timestamp%>/'"$timestamp"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
-sed -i 's/<%task-id%>/'"$task_id"'/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
-sed -i 's/<%status%>/pending/g' "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/$task_id.md"
+sed -i 's/<%title%>/'"$title"'/g' "$task_new_path/$task_id.md"
+sed -i 's/<%timestamp%>/'"$timestamp"'/g' "$task_new_path/$task_id.md"
+sed -i 's/<%task-id%>/'"$task_id"'/g' "$task_new_path/$task_id.md"
+sed -i 's/<%status%>/pending/g' "$task_new_path/$task_id.md"
 
 if [ "$quite" == false ]; then
 	echo "Task created successfully!"
 fi
 
 if [ "$open" == true ]; then
-	cd "$DEEPTHOUGHT_PATH/Projects/$project/Tasks/"
+	cd "$task_new_path"
 	nvim "$code-$count.md"
 fi
