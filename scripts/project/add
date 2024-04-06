@@ -7,7 +7,7 @@ source "$DOTLY_PATH/scripts/core/_main.sh"
 ##? Creates a new project into the projects index.
 ##?
 ##? Usage:
-##?    add <project> [--open] [--code=<code>] [--type=<type>] [--priority=<priority>] [--contract=<contract>] [--index-only] [--quite]
+##?    add <project> [--open] [--code=<code>] [--type=<type>] [--priority=<priority>] [--contract=<contract>] [--index-only] [--quite] [--parent=<parent>]
 docs::parse "$@"
 
 title=${project:-unknown}
@@ -25,13 +25,29 @@ index_only=${index_only:-false}
 open=${open:-false}
 quite=${quite:-false}
 
-project_new_path="$DEEPTHOUGHT_PATH/Projects/$title"
 project_tpl_path="$DEEPTHOUGHT_PATH/Templates"
+
+if [ -n "$parent" ]; then
+	# If parent is true, display the project selector, if not assume the
+	# project name is provided by the user.
+	if [ "$parent" == true ]; then
+		parent=$(ls --color=never "$DEEPTHOUGHT_PATH/Projects/" | fzf)
+	fi
+	# validate the parent project path.
+	if [ ! -d "$DEEPTHOUGHT_PATH/Projects/$parent" ]; then
+		echo "Given parent project does not exists."
+		exit
+	fi
+	project_new_path="$DEEPTHOUGHT_PATH/Projects/$parent/Projects/$title"
+else
+	project_new_path="$DEEPTHOUGHT_PATH/Projects/$title"
+fi
 
 if [ "$quite" == false ]; then
 	echo "Name: $title ($code)"
 	echo "Type: ${type}"
 	echo "Contract: ${contract}"
+	echo "Path: ${project_new_path}"
 fi
 
 # Create the main directory.
