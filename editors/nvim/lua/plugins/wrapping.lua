@@ -1,6 +1,6 @@
 return {
   "andrewferrier/wrapping.nvim",
-  config = function()
-    require("wrapping").setup()
-  end,
+  opts = {
+    create_keymaps = false,
+  },
 }
