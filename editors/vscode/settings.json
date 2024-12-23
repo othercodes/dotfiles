@@ -43,5 +43,6 @@
     "workbench.iconTheme": "catppuccin-mocha",
     "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
     "terminal.integrated.fontSize": 16,
-    "window.zoomLevel": 1
+    "window.zoomLevel": 1,
+    "markdown-pdf.displayHeaderFooter": false
 }

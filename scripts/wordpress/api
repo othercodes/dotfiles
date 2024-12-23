@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+source "$DOTLY_PATH/scripts/core/_main.sh"
+
+##? List the task registered in the ongoing projects.
+##?
+##? Usage:
+##?    api <hostname> [<route>] [--method=<method>] [--resource-id=<id>] [--payload=<payload>] [--debug]
+docs::parse "$@"
+
+username=${username:-"ck_4867f6801e59afcaed65dda63a546a7830df7ec4"}
+# password=${password:-"odZs mzm4 Kj5d R1x2 f4P6 TEpC"}
+password='cs_da1b3af81e9bd936f215c8d266c228a52efe2843'
+
+debug=${debug:-false}
+method=${method:-'GET'}
+resource_id=${resource_id:-"<id>"}
+
+if [ -z "$route" ]; then
+	default_routes=(
+		"wp/v2/posts"
+		"wp/v2/posts/${resource_id}/revisions"
+		"wp/v2/categories"
+		"wp/v2/tags"
+		"wp/v2/pages"
+		"wp/v2/ages/$resource_id/revisions"
+		"wp/v2/comments"
+		"wp/v2/taxonomies"
+		"wp/v2/media"
+		"wp/v2/users"
+		"wp/v2/types"
+		"wp/v2/statuses"
+		"wp/v2/settings"
+		"wp/v2/themes"
+		"wp/v2/search"
+		"wp/v2/block-types"
+		"wp/v2/blocks"
+		"wp/v2/blocks/$resource_id/autosaves"
+		"wp/v2/block-renderer"
+		"wp/v2/block-directory/search"
+		"wp/v2/plugins"
+	)
+
+	route=$(for route in "${default_routes[@]}"; do echo "$route"; done | fzf)
+fi
+
+arguments=(
+	"-X" "${method}"
+	"--silent"
+	"--user" "${username}:${password}"
+	"https://${hostname}/wp-json/${route}"
+)
+
+if [ "$debug" == true ]; then
+	arguments+=("--verbose")
+fi
+
+curl "${arguments[@]}" | jq
