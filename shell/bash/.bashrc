@@ -1,4 +1,4 @@
-export DOTFILES_PATH="/home/usantisteban/.dotfiles"
+export DOTFILES_PATH="~/.dotfiles"
 export DOTLY_PATH="$DOTFILES_PATH/modules/dotly"
 export DOTLY_THEME="codely"
 
