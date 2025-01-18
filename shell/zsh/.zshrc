@@ -39,3 +39,5 @@ source "$DOTFILES_PATH/shell/zsh/key-bindings.zsh"
 (( ! ${+functions[p10k]} )) || p10k finalize
 
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/opt/homebrew/bin:$PATH"
+
