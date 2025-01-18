@@ -39,3 +39,6 @@ source "$DOTFILES_PATH/shell/zsh/key-bindings.zsh"
 (( ! ${+functions[p10k]} )) || p10k finalize
 
 export PATH="$HOME/.local/bin:$PATH"
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"

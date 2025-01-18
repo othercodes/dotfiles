@@ -18,6 +18,7 @@
     ~/.zshrc: shell/zsh/.zshrc
     ~/.inputrc: shell/.inputrc
     ~/.config/nvim: editors/nvim
+    ~/.config/alacritty: emulators/alacritty
     ~/.tmux.conf: shell/.tmux.conf
     ~/.gitconfig: git/.gitconfig
     ~/.gitignore: git/.gitignore
